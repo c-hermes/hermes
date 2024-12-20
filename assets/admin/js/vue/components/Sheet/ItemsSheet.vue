@@ -1,8 +1,8 @@
 <script setup>
 import {computed, ref, watch } from 'vue'
 //import Items from '../Base/Items.vue';
-import ButtonsUpDown from '../Base/ButtonsUpDown.vue';
 import { useAjaxSwitchPosition, useSwitchIndex } from '../Base/BaseItems'
+import ButtonsUpDown from '../Base/ButtonsUpDown.vue';
 
 const props = defineProps(['items', 'norecord'])
 let myitems = ref(props.items)
@@ -24,35 +24,13 @@ const changeIndex = (direction, index) => {
     }
     directionchange.value = direction
    
-    myitems = switchPosition(direction, index)
+   myitems = getUpOrDown(direction, index)
 }
 
 watch(indexchange, (newIndex, oldValue) =>{
-    myitems = switchPosition(directionchange.value, newIndex)
+    myitems = getUpOrDown(directionchange.value, newIndex)
     }
 )
-
-// si on remonte un item d'un cran (et du coup on baisse d'un niveau celui qu'on remplace)
-const switchPosition = (direction, index) => {
-    if(index > -1){
-        const indexes = useSwitchIndex(direction, index,myitems.length)
-        index1.value = indexes.index1
-        index2.value = indexes.index2 
-        // inverser position
-        const up = myitems[index1.value]
-        const down = myitems[index2.value]
-        const position2  = up['position']
-        const position1  = down['position']
-        up['position'] =  position1
-        down['position'] =  position2
-
-        myitems.splice(index1.value, 1, myitems.splice(index2.value, 1, myitems[index1.value])[0]);
-
-    }else{
-        myitems = props.items
-    }
-    return myitems
-}
 
 // si on remonte un item d'un cran (et du coup on baisse d'un niveau celui qu'on remplace)
 const getUpOrDown = (direction, index) => {
@@ -61,27 +39,40 @@ const getUpOrDown = (direction, index) => {
         index1.value = indexes.index1
         index2.value = indexes.index2
 
-        // mise à jour des position en base de donnéd
-        useAjaxSwitchPosition(URI, myitems[index1.value]['id'], myitems[index2.value]['id'])
-  
-        // inverser position
         const up = myitems[index1.value]
         const down = myitems[index2.value]
+
+        // mise à jour des position en base de donnéd
+        // ajaxSwitchPosition(down, up)
+        useAjaxSwitchPosition(URI, down['id'], up['id'])
         const position2  = up['position']
         const position1  = down['position']
+
+        // inverser position
         up['position'] =  position1
         down['position'] =  position2
-        myitems.splice(index1.value, 1, myitems.splice(index2.value, 1, myitems[index1.value])[0]);
 
+        const arraydeb = myitems.slice(0, index1.value-1) // tableau 0 - "index-1"
+        const arrayfin = myitems.slice(index1.value+1) // tableau index+1 - "fin"
+        if('down' == direction){
+            const arraydeb = myitems.slice(0, index2.value-1) // tableau 0 - "index-1"
+            const arrayfin = myitems.slice(index2.value+1) // tableau index+1 - "fin"
+        }
+
+        arrayfin.unshift(down)
+        arrayfin.unshift(up)
+        myitems = arraydeb.concat(arrayfin)
     }else{
         myitems = props.items
     }
     return myitems
 }
 
+
 const last = computed(() => {
    return myitems.length - 1
 })
+
 
 </script>
 
