@@ -63,25 +63,11 @@ const getUpOrDown = (direction, index) => {
         const up = myitems[index1.value]
         const down = myitems[index2.value]
 
-        // mise à jour des position en base de donnéd
+        // mise à jour des position en base de donnée
         useAjaxSwitchPosition(URI, down['id'], up['id'])
-        const position2  = up['position']
-        const position1  = down['position']
 
-        // inverser position
-        up['position'] =  position1
-        down['position'] =  position2
-
-        const arraydeb = myitems.slice(0, index1.value-1) // tableau 0 - "index-1"
-        const arrayfin = myitems.slice(index1.value+1) // tableau index+1 - "fin"
-        if('down' == direction){
-            const arraydeb = myitems.slice(0, index2.value-1) // tableau 0 - "index-1"
-            const arrayfin = myitems.slice(index2.value+1) // tableau index+1 - "fin"
-        }
-
-        arrayfin.unshift(down)
-        arrayfin.unshift(up)
-        myitems = arraydeb.concat(arrayfin)
+        // affichazge : échange de positions
+        myitems.value = myitems.splice(index1.value, 1, myitems.splice(index2.value, 1, myitems[index1.value])[0]);
     }else{
         myitems = props.items
     }
@@ -115,7 +101,7 @@ const last = computed(() => {
                         <ButtonsUpDown :class="{'disabled': index == last }"  :direction="'down'"    @click="changeIndex('down', index)"></ButtonsUpDown>
                     </div>
                 </div>
-                {{ item.position }} 
+                <!-- {{ item.position }}  -->
             </td>
             <td class="col-1">{{ item.template }}</td>
             <td>
