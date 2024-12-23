@@ -90,7 +90,7 @@ class SectionController extends AbstractAdminController
 
 
     #[Route(path: '/menu/{menu}/nouvelle-section/nouveau-contenu', name: 'section_post_new_menu', methods: ['GET', 'POST'])]
-    public function SectionPostNewMenu(Request $request, ManagerRegistry $doctrine, Copy $copy,ApiClient $apiClient , #[MapEntity(mapping: ['menu' => 'slug'])] ?Menu $menu): Response
+    public function SectionPostNewMenu(Request $request, ManagerRegistry $doctrine, SectionRepository $sectionRepository, Copy $copy,ApiClient $apiClient , #[MapEntity(mapping: ['menu' => 'slug'])] ?Menu $menu): Response
     {
         $sections = $menu->getSections();
         foreach($sections as $section){
@@ -114,6 +114,8 @@ class SectionController extends AbstractAdminController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $doctrine->getManager();
+            $position_section = $sectionRepository->getMaxPosition($menu);
+            $section->setPosition($position_section);
             $entityManager->persist($section);
             $entityManager->flush();
             if ($form->get('saveAndAddPost')->isClicked()) {

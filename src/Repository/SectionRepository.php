@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Hermes\Post;
+use App\Entity\Hermes\Menu;
 use App\Entity\Hermes\Section;
 use App\Repository\Traits\BaseRepositoryTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -53,4 +53,30 @@ class SectionRepository extends ServiceEntityRepository
         return $sections;
 
     }
+
+
+    /**
+     * @return int Returns max position value for a given Menu
+     */
+     public function getMaxPosition(Menu $menu)
+     {
+         $qb = $this->getQbMaxPosition();
+         if (isset($menu)) {
+             $qb
+                 ->where('m.menu = :menu')
+                 ->setParameter(':menu', $menu->getId());
+         }
+         $list = $qb
+             ->getQuery()
+             ->getResult();
+ 
+         if (isset($list[0])) {
+             return ++$list[0]['position'];
+         }
+         if (isset($list['position'])) {
+             return ++$list['position'];
+         }
+         return 1;
+     }
+
 }
