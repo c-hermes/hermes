@@ -123,7 +123,11 @@ class Section
     public function __toString(): string
     {
         if(!is_null($this->name)){
-            return $this->name;
+            if(isset( $this->getPosts()->getValues()[0])){
+                return  $this->getmenu()->getName() . ' - ' . $this->getPosts()->getValues()[0]->getName()  ;
+            }
+            return  $this->getmenu()->getName() . ' - ' . $this->name  ;
+
         }
         return '';
     }

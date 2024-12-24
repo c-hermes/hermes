@@ -244,7 +244,7 @@ class PostController extends AbstractAdminController
 
 
     #[Route(path: '/contenu/copy/{post}', name: 'post_copy', methods: ['GET', 'POST'])]
-    public function copy(Request $request, #[MapEntity(mapping: ['post' => 'id'])] Post $post, Copy $copy): Response
+    public function copy(Request $request, #[MapEntity(mapping: ['post' => 'id'])] Post $post, ManagerRegistry $doctrine, Copy $copy): Response
     {
         $form = $this->createForm(PostCopyType::class, $post);
         $fromPost = clone $post;
