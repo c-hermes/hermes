@@ -20,9 +20,8 @@ class ApiClient
        
         $api_formation = $this->params->get('API_HERMES_TEMPLATES').$entity;
         if($itemsPerPage){
-            $api_formation .= "?itemsPerPage=$itemsPerPage ";
+            $api_formation .= "?itemsPerPage=$itemsPerPage";
         }
-
         try{
             $response = $this->client->request(
                 $method,
@@ -31,7 +30,6 @@ class ApiClient
             $jsonsl_content = $response->getContent();
             $array = json_decode($response->getContent(), true);
         }catch(Exception $e){
-
         }
 
         return $array;
