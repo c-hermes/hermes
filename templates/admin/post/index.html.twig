@@ -3,60 +3,47 @@
 {% block title %}{{ 'post.list'|trans() }}{% endblock %}
 
 {% block content %}
+
+    {% set global = {
+        'active':'global.active'|trans(),
+        'inactive':'global.inactive'|trans(),
+        'locale':'global.locale'|trans(),
+        'sheet':'sheet.name'|trans(),
+        'menu':'menu.name'|trans(),
+        'template':'template.name'|trans(),
+        'position':'global.position'|trans(),
+        'name':'global.name'|trans(),
+        'startPublishedAt':'global.startPublishedAt'|trans(),
+        'endPublishedAt':'global.endPublishedAt'|trans(),
+        'updatedAt':'global.updatedAt'|trans(),
+        'actions':'global.actions'|trans(),
+        'config':'action.config'|trans()|raw ,
+        }
+    %}
+
+    {% set norecord = {
+        'norecord':'global.no_record'|trans()|raw ,
+        }
+    %}
+
+    {% set buttons = {
+        'addpost': path('menu_section_post_new_sheet', {'sheet':'nouvelle'}) ,
+        'newcontent': 'global.new_content'|trans(),
+        }
+    %}
+
+    <div class="row mb-2">
     <h1 class="text-secondary">{{ 'post.list'|trans() }}</h1>
 
-    <table class="table">
-        <thead>
-            <tr class="align-middle">
-                <th>{{ 'global.active'|trans() }}</th>
-                <th>{{ 'global.locale'|trans() }}</th>
-                <th>{{ 'global.sheet'|trans() }}</th>
-                <th>{{ 'global.menu'|trans() }}</th>
-                <th>{{ 'global.template'|trans() }}</th>
-                <th>{{ 'global.position'|trans() }}</th>
-                <th>{{ 'global.name'|trans() }}</th>
-                <th>{{ 'global.startPublishedAt'|trans() }}</th>
-                <th>{{ 'global.endPublishedAt'|trans() }}</th>
-                <th>{{ 'global.updatedAt'|trans() }}</th>
-                <th>{{ 'global.actions'|trans() }}</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for post in posts|sort((a, b) =>a.position <=> b.position)|sort((a, b) =>a.section.menu.name <=> b.section.menu.name) |sort((a, b) =>a.section.menu.sheet.name <=> b.section.menu.sheet.name)  %}
-{#        {% for post in posts|sort((a, b) => a.position <=> b.position)  %}#}
-            <tr class="align-middle">
-                <td>
-                    <div class="form-check form-switch form-switch-sm my-0">
-                        <input type="checkbox" class="post-active form-check-input" id="{{ post.id }}"  {{ post.isActive ? 'checked': '' }} >
-                        <label class="custom-control-label" for="{{ post.id }}"></label>
-                    </div>
-                </td>
-                <td>{{ post.section.menu.sheet.locale ?? '' }}</td>
-                <td>{{ post.section.menu.sheet ?? '' }}</td>
-                <td>{{ post.section.menu ?? '' }}</td>
-                <td>{{ post.section.template.name ?? '' }}</td>
-                <td>{{ post.position }}</td>
-                <td>{{ post.name }}</td>
-                <td>{{ post.startPublishedAt ? post.startPublishedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ post.endPublishedAt ? post.endPublishedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ post.updatedAt ? post.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a class="hms-color1" href="{{ path('post_edit', {'id': post.id,'post': post.name,'menu': post.section.menu.slug}) }}">{{ 'action.edit'|trans()|raw }}</a>
-                    <a class="hms-color1" href="{{ path('post_copy', {'post': post.id, }) }}">{{ 'action.copy-1'|trans()|raw }}</a>
-{#                    {% set sheet_slug = post.section.menu.sheet.slug ?? null %}#}
-{#                    {% set menu_slug = post.section.menu.slug ?? null %}#}
-{#                    {% if (sheet_slug is not null and menu_slug is not null)  %}#}
-{#                        <a target="_blank" class="" href="{{ path('previsualidation_sheet', {'sheet': sheet_slug, 'slug': menu_slug}) }}"> {{ 'action.preview'|trans()|raw }}</a>#}
-{#                    {% endif %}#}
-                </td>
-            </tr>
-        {% else %}
-            <tr class="align-middle">
-                <td colspan="10">{{ 'global.no_record'|trans()|raw }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <input id="vue_items_post" type="hidden" value="{{ posts|json_encode }}" data-filtre="{{ sections|json_encode }}"  data-global="{{ global|json_encode}}" data-norecord="{{ norecord|json_encode}}" data-buttons="{{ buttons|json_encode}}"  />
+    <!-- Composant Vue ListSheet -->
+    <div id="vue_admin_list_post" ></div>
 
-    <a type="button" class="btn btn-outline-secondary hms-bg-color1 text-white" id="post-add" href="{{ path('menu_section_post_new_sheet', {'sheet':'nouvelle'}) }}">{{ 'global.new_content'|trans() }}</a>
+    {# <a type="button" class="btn btn-outline-secondary hms-bg-color1 text-white" id="post-add" href="{{ path('menu_section_post_new_sheet', {'sheet':'nouvelle'}) }}">{{ 'global.new_content'|trans() }}</a> #}
 {% endblock %}
+
+
+{% block javascript %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('hermes_admin_list_post_vue') }}
+{% endblock javascript %}

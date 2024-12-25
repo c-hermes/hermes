@@ -6,8 +6,10 @@
         {% set posts = section.posts %}
     {% endif %}
     {% for post in posts|sort((a, b) => a.position <=> b.position) %}
-        <div class="container-fluid col-lg-{{  (section.templateWidth ?? container_width)|col_lg() }} mx-auto px-0" >
-            {{ post.content|raw }}
-        </div>
+        {% if post.active %}
+            <div class="container-fluid col-lg-{{  (section.templateWidth ?? container_width)|col_lg() }} mx-auto px-0" >
+                {{ post.content|raw }}
+            </div>
+        {% endif %}
     {% endfor %}
 </section>

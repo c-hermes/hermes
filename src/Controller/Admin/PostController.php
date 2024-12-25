@@ -8,6 +8,7 @@ use App\Entity\Hermes\Section;
 use App\Form\Admin\PostCopyType;
 use App\Form\Admin\PostType;
 use App\Repository\PostRepository;
+use App\Repository\SectionRepository;
 use App\Service\Copy;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -20,12 +21,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class PostController extends AbstractAdminController
 {
     #[Route(path: '/contenu/', name: 'post_index', methods: ['GET'])]
-    public function index(PostRepository $postRepository,ManagerRegistry $doctrine,): Response
+    public function index(PostRepository $postRepository,SectionRepository $sectionRepository ,ManagerRegistry $doctrine,): Response
     {
         $posts = $postRepository->getEditablePosts();
+        $sections = $sectionRepository->getArrayResults();
 
         $array = [
             'posts' => $posts,
+            'sections' => $sections,
         ];
         $array = $this->mergeActiveConfig($doctrine, $array);
 
@@ -287,6 +290,20 @@ class PostController extends AbstractAdminController
         $array = $this->mergeActiveConfig($doctrine, $array);
 
         return $this->render('admin/post/copy.html.twig', $array);
+    }
+
+    #[Route(path: '/ajax/switch-position/post', name: 'switch_post_position_ajax', methods: ['POST', 'PUT'])]
+    public function ajaxPosition(Request $request, PostRepository $postRepository)
+    {
+        if ($request->isXMLHttpRequest()) {
+            $ids = json_decode($request->getContent(), true);
+            $id1= $ids['id1'];
+            $id2= $ids['id2'];
+            $bpos = $postRepository->switchPosition($id1, $id2);
+            return new JsonResponse(array('data' => $bpos));
+        }
+
+        return new Response('This is not ajax!', 400);
     }
 
 

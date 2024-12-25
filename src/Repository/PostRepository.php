@@ -76,15 +76,38 @@ class PostRepository extends ServiceEntityRepository
      */
      public function getEditablePosts()
      {
-
-        $allposts = $this->findAll();
-        foreach($allposts as $post){
+        $allposts = $this->createQueryBuilder('s')
+        ->orderBy('s.section', 'ASC')
+        ->addOrderBy('s.position', 'ASC')
+        ->addOrderBy('s.active', 'DESC')
+        ->getQuery()
+        ->getResult();
+        // $allposts = $this->findAll();
+        foreach($allposts as $key => $post){
             if(!is_null($post->getSection())){
-                $posts[] = $post;
+                // $posts[] = $post;
+                $posts[$key]['id'] = $post->getId();
+                $posts[$key]['active'] = $post->isActive();
+                $posts[$key]['position'] = $post->getPosition();
+                $posts[$key]['name'] = $post->getName();
+                $posts[$key]['startPublishedAt'] = $post->getStartPublishedAt();
+                $posts[$key]['endPublishedAt'] = $post->getEndPublishedAt();
+                $posts[$key]['updatedAt'] = $post->getUpdatedAt();
+                
+                $posts[$key]['section'] = $post->getSection()->getName();
+                $posts[$key]['section_id'] = $post->getSection()->getId();
+                $posts[$key]['menu'] = $post->getSection()->getMenu()->getName();
+                $posts[$key]['template'] = $post->getSection()->getTemplate()->getName();
+                $posts[$key]['template_code'] = $post->getSection()->getTemplate()->getCode();
+                $posts[$key]['menu_id'] = $post->getSection()->getMenu()->getId();
+                $posts[$key]['menu_slug'] = $post->getSection()->getMenu()->getSlug();
+                $posts[$key]['locale'] = $post->getSection()->getMenu()->getLocale();
+                $posts[$key]['sheet'] = $post->getSection()->getMenu()->getSheet()->getName();
+
             }
         }
 
-         return $posts;
+         return array_values($posts);
 
      }
 //    /**

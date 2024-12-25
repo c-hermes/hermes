@@ -33,6 +33,7 @@ Encore
      .addEntry('hermes_admin_list_sheet_vue', './assets/admin/js/vue/app_list_sheet.js')
      .addEntry('hermes_admin_list_menu_vue', './assets/admin/js/vue/app_list_menu.js')
      .addEntry('hermes_admin_list_section_vue', './assets/admin/js/vue/app_list_section.js')
+     .addEntry('hermes_admin_list_post_vue', './assets/admin/js/vue/app_list_post.js')
      .addEntry('hermes_admin', './assets/admin/js/app.js')
      .addEntry('hermes_front', './assets/front/js/hermes/app.js')
     //  .addEntry('hermes_one_page_1', './assets/front/js/hermes/app_one_page_1.js')
