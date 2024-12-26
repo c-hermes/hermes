@@ -31,26 +31,28 @@ class SectionRepository extends ServiceEntityRepository
         ->getQuery()
         ->getResult();
         foreach($results as $key => $result){
-            $sections[$key]['id'] = $result->getId();
-            $sections[$key]['active'] = $result->isActive();
-            $sections[$key]['position'] = $result->getPosition();
-            $sections[$key]['name'] = $result->getName();
-            foreach($result->getPosts() as $kp => $post){
-                $sections[$key]['posts'][$kp]['id'] = $post->getId();
-                $sections[$key]['posts'][$kp]['name'] = $post->getName();
-                $sections[$key]['posts'][$kp]['isActive'] = $post->isActive();
-                $sections[$key]['posts'][$kp]['post_position'] = $post->getPosition();
+            if(!is_null($result->getMenu()) ){
+                $sections[$key]['id'] = $result->getId();
+                $sections[$key]['active'] = $result->isActive();
+                $sections[$key]['position'] = $result->getPosition();
+                $sections[$key]['name'] = $result->getName();
+                foreach($result->getPosts() as $kp => $post){
+                    $sections[$key]['posts'][$kp]['id'] = $post->getId();
+                    $sections[$key]['posts'][$kp]['name'] = $post->getName();
+                    $sections[$key]['posts'][$kp]['isActive'] = $post->isActive();
+                    $sections[$key]['posts'][$kp]['post_position'] = $post->getPosition();
+                }
+                $sections[$key]['template'] = $result->getTemplate()->getName();
+                $sections[$key]['template_code'] = $result->getTemplate()->getCode();
+                $sections[$key]['menu_id'] = $result->getMenu()->getId();
+                $sections[$key]['menu_slug'] = $result->getMenu()->getSlug();
+                $sections[$key]['menu'] = $result->getMenu()->getName();
+                $sections[$key]['locale'] = $result->getMenu()->getLocale();
+                $sections[$key]['sheet'] = $result->getMenu()->getSheet()->getName();
             }
-            $sections[$key]['template'] = $result->getTemplate()->getName();
-            $sections[$key]['template_code'] = $result->getTemplate()->getCode();
-            $sections[$key]['menu_id'] = $result->getMenu()->getId();
-            $sections[$key]['menu_slug'] = $result->getMenu()->getSlug();
-            $sections[$key]['menu'] = $result->getMenu()->getName();
-            $sections[$key]['locale'] = $result->getMenu()->getLocale();
-            $sections[$key]['sheet'] = $result->getMenu()->getSheet()->getName();
         }
        
-        return $sections;
+        return array_values($sections);
 
     }
 
