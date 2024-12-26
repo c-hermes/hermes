@@ -83,7 +83,7 @@ const last = computed(() => {
         <td class="col-1">{{ item.locale }}</td>
         <td class="col-2">{{ item.sheet }}</td>
         <td class="col-2">{{ item.name }}</td>
-        <td>
+        <td v-if="myselect !== 'all'">
             <div class="btn-group">
                 <div class="btn-group">
                     <ButtonsUpDown :class="{'disabled': index == 0 }"  :direction="'up'"   @click="changeIndex('up', index)"></ButtonsUpDown>

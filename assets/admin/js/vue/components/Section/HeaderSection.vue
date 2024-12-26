@@ -3,11 +3,13 @@ Ce composant récupère les entête du tableau des Sous Menus (Menu).
 -->
 
 <script setup>
-import { computed,} from 'vue'
+import { computed, inject,} from 'vue'
 const props = defineProps(['header'])
 const header = computed(() => {
    return props.header
 })
+
+const myselect = inject('myselect')
 
 </script>
 
@@ -18,7 +20,7 @@ const header = computed(() => {
                         <th>{{ header.locale }}</th>
                         <th>{{ header.sheet }}</th>
                         <th>{{ header.menu }}</th>
-                        <th>{{ header.position }}</th>
+                        <th v-if="myselect !== 'all'">{{ header.position }}</th>
                         <th>{{ header.template }}</th>
                         <th>{{ header.post }}</th>
                         <th>{{ header.actions }}</th>
