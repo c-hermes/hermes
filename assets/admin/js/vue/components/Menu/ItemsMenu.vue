@@ -1,7 +1,7 @@
 <script setup>
 import {computed, inject, ref, watch } from 'vue'
 import HeaderMenu from './HeaderMenu.vue';
-import { useAjaxSwitchPosition, useChangeIndex, useMyfilter, useSwitchIndex } from '../Base/BaseItems'
+import { useAjaxSwitchPosition, useChangeIndex, useGetUpOrDown, useMyfilter, useSwitchIndex } from '../Base/BaseItems'
 import ButtonsUpDown from '../Base/ButtonsUpDown.vue';
 
 
@@ -41,18 +41,7 @@ watch(indexchange, (newIndex, oldValue) =>{
 // si on remonte un item d'un cran (et du coup on baisse d'un niveau celui qu'on remplace)
 const getUpOrDown = (direction, index) => {
     if(index > -1){
-        const indexes = useSwitchIndex(direction, index,myitems.length)
-        index1.value = indexes.index1
-        index2.value = indexes.index2
-
-        const up = myitems[index1.value]
-        const down = myitems[index2.value]
-
-        // mise à jour des position en base de donnée
-        useAjaxSwitchPosition(URI, down['id'], up['id'])
-
-        // affichazge : échange de positions
-        myitems.value = myitems.splice(index1.value, 1, myitems.splice(index2.value, 1, myitems[index1.value])[0]);
+        myitems = useGetUpOrDown(myitems, URI, direction, index)
     }else{
         myitems = props.items
     }

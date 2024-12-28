@@ -79,23 +79,17 @@ export function useGetUpOrDown(myitems, URI, direction, index){
     index1.value = indexes.index1
     index2.value = indexes.index2
 
-
-    // mise à jour des position en base de donnéd
-    useAjaxSwitchPosition(URI, myitems[index1.value]['id'], myitems[index2.value]['id'])
-
-
-    // inverser positions dans tableau
     const up = myitems[index1.value]
     const down = myitems[index2.value]
-    const position2  = up['position']
-    const position1  = down['position']
-    up['position'] =  position1
-    down['position'] =  position2
 
-    myitems.splice(index1.value, 1, myitems.splice(index2.value, 1, myitems[index1.value])[0]);
-  }else{
-      myitems = myitems
-  }
+    // mise à jour des position en base de donnée
+    useAjaxSwitchPosition(URI, down['id'], up['id'])
 
-  return myitems
+    // affichazge : échange de positions
+    myitems.value = myitems.splice(index1.value, 1, myitems.splice(index2.value, 1, myitems[index1.value])[0]);
+}else{
+    myitems = props.items
+}
+//return { 'myitems': myitems }
+return  myitems
 }
