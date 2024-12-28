@@ -1,7 +1,7 @@
 <script setup>
 import {computed, inject, ref, watch } from 'vue'
 import HeaderPost from './HeaderPost.vue';
-import { useAjaxSwitchPosition, useMyfilter, useSwitchIndex } from '../Base/BaseItems'
+import { useAjaxSwitchPosition, useChangeIndex, useMyfilter, useSwitchIndex } from '../Base/BaseItems'
 import ButtonsUpDown from '../Base/ButtonsUpDown.vue';
 
 const props = defineProps(['header', 'items', 'norecord'])
@@ -27,12 +27,9 @@ const getCopyPostHref = (item) => {
 }
 
 const changeIndex = (direction, index) => {
-    if( index != indexchange.value){
-        indexchange.value = index
-    }else{
-        indexchange.value = index + 1
-    }
-    directionchange.value = direction
+    const changeIndexes = useChangeIndex(direction, index)
+    indexchange.value = changeIndexes.indexchange
+    directionchange.value = changeIndexes.directionchange
     myitems = getUpOrDown(direction, index)
 }
 

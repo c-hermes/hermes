@@ -1,7 +1,7 @@
 <script setup>
 import {computed, inject, ref, watch } from 'vue'
 import HeaderMenu from './HeaderMenu.vue';
-import { useAjaxSwitchPosition, useMyfilter, useSwitchIndex } from '../Base/BaseItems'
+import { useAjaxSwitchPosition, useChangeIndex, useMyfilter, useSwitchIndex } from '../Base/BaseItems'
 import ButtonsUpDown from '../Base/ButtonsUpDown.vue';
 
 
@@ -26,15 +26,12 @@ const getAddMenuHref = (item) => {
   return "/" + item.locale + "/admin/menu/" + item.slug + "/nouvelle-section/nouveau-contenu"
 }
 const changeIndex = (direction, index) => {
-    if( index != indexchange.value){
-        indexchange.value = index
-    }else{
-        indexchange.value = index + 1
-    }
-    directionchange.value = direction
-   
+    const changeIndexes = useChangeIndex(direction, index)
+    indexchange.value = changeIndexes.indexchange
+    directionchange.value = changeIndexes.directionchange
     myitems = getUpOrDown(direction, index)
 }
+
 
 watch(indexchange, (newIndex, oldValue) =>{
     myitems = getUpOrDown(directionchange.value, newIndex)

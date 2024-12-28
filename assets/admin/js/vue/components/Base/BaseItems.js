@@ -1,7 +1,19 @@
 import {ref } from 'vue'
 
+const indexchange = ref(-1)
+const directionchange = ref('up')
 const index1 = ref(1)
 const index2 = ref(1)
+
+export function useChangeIndex (direction, index){
+  if( index != indexchange.value){
+      indexchange.value = index
+  }else{
+      indexchange.value = index + 1
+  }
+  directionchange.value = direction
+  return { 'indexchange': indexchange.value, 'directionchange': directionchange.value }
+}
 
 // on met à jour les positions des 2 items en base
 export function useAjaxSwitchPosition(uri, id1, id2){

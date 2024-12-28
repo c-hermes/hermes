@@ -1,7 +1,7 @@
 <script setup>
 import {computed, inject, ref, watch } from 'vue'
 import HeaderSection from './HeaderSection.vue';
-import { useAjaxSwitchPosition, useMyfilter, useSwitchIndex } from '../Base/BaseItems'
+import { useAjaxSwitchPosition, useChangeIndex, useMyfilter, useSwitchIndex } from '../Base/BaseItems'
 import ButtonsUpDown from '../Base/ButtonsUpDown.vue';
 
 const props = defineProps(['header', 'items', 'norecord'])
@@ -14,9 +14,9 @@ const indexchange = ref(-1)
 const directionchange = ref('up')
 const index1 = ref(1)
 const index2 = ref(1)
-const URI = `/fr/admin/ajax/switch-position/section`
+const URI = `/fr/admin/ajax/switch-position/section` // URI section
 
-const myselect = inject('myselect')
+const myselect = inject('myselect') // inject myselect
 
 const getPostHref = (post, item) => {
   return "/" + item.locale + "/admin/menu/" + item.menu_slug + '/contenu/' + post.id + '/' + post.name
@@ -39,12 +39,9 @@ const getCopySectionHref = (item) => {
 }
 
 const changeIndex = (direction, index) => {
-    if( index != indexchange.value){
-        indexchange.value = index
-    }else{
-        indexchange.value = index + 1
-    }
-    directionchange.value = direction
+    const changeIndexes = useChangeIndex(direction, index)
+    indexchange.value = changeIndexes.indexchange
+    directionchange.value = changeIndexes.directionchange
     myitems = getUpOrDown(direction, index)
 }
 
