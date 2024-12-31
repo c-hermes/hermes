@@ -1,14 +1,10 @@
 <script setup>
-import {computed, ref, watch } from 'vue'
-import { useAjaxSwitchPosition, useChangeIndex, useGetUpOrDown, useSwitchIndex } from '../Base/BaseItems'
+import {computed, reactive } from 'vue'
+import {useChangeIndex} from '../Base/BaseItems'
 import ButtonsUpDown from '../Base/ButtonsUpDown.vue';
 
 const props = defineProps(['items', 'norecord'])
-let myitems = ref(props.items)
-const indexchange = ref(-1)
-const directionchange = ref('up')
-const index1 = ref(1)
-const index2 = ref(1)
+let myitems = reactive(props.items)
 const URI = `/fr/admin/ajax/switch-position/sheet` // URI for sheet
 
 const getMenuHref = (item) => {
@@ -16,39 +12,18 @@ const getMenuHref = (item) => {
 }
 
 const changeIndex = (direction, index) => {
-    const changeIndexes = useChangeIndex(direction, index)
-    indexchange.value = changeIndexes.indexchange
-    directionchange.value = changeIndexes.directionchange
-   
-   myitems = getUpOrDown(direction, index)
+    myitems = useChangeIndex(myitems, direction, index, URI)
 }
-
-watch(indexchange, (newIndex, oldValue) =>{
-    myitems = getUpOrDown(directionchange.value, newIndex)
-    }
-)
-
-// si on remonte un item d'un cran (et du coup on baisse d'un niveau celui qu'on remplace)
-const getUpOrDown = (direction, index) => {
-    if(index > -1){
-        myitems = useGetUpOrDown(myitems, URI, direction, index)
-    }else{
-        myitems = props.items
-    }
-    return myitems
-}
-
 
 const last = computed(() => {
    return myitems.length - 1
 })
 
-
 </script>
 
 <template>
 <tbody>
-    <tr v-for="(item, index) in getUpOrDown(directionchange, indexchange)" class="align-middle">
+    <tr v-for="(item, index) in myitems" class="align-middle">
         <td class="col-2">
             <div class="form-check form-switch form-switch-sm my-0">
                 <input type="checkbox" class="sheet-active form-check-input" :id="item.id" :checked="item.active ? true : false">

@@ -168,6 +168,18 @@ const editConfig =  {
     mediaEmbed: {
       previewsInData:true
     },
+    link: {			
+      decorators: {
+      isExternal: {
+        mode: 'automatic',
+        callback: url => url.startsWith( 'http' ),
+        attributes: {
+          target: '_blank',
+          rel: 'noopener noreferrer'
+        }
+      }
+		}
+  }
   };
   ClassicEditor.create(ckeditor, editConfig)
     .then((editor) => {

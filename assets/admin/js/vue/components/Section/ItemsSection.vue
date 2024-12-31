@@ -1,7 +1,7 @@
 <script setup>
-import {computed, inject, ref, watch } from 'vue'
+import {computed, inject, reactive } from 'vue'
 import HeaderSection from './HeaderSection.vue';
-import { useAjaxSwitchPosition, useChangeIndex, useGetUpOrDown, useMyfilter, useSwitchIndex } from '../Base/BaseItems'
+import {useChangeIndex, useMyfilter} from '../Base/BaseItems'
 import ButtonsUpDown from '../Base/ButtonsUpDown.vue';
 
 const props = defineProps(['header', 'items', 'norecord'])
@@ -9,11 +9,7 @@ const header = computed(() => {
    return props.header
 })
 
-let myitems = ref(props.items)
-const indexchange = ref(-1)
-const directionchange = ref('up')
-const index1 = ref(1)
-const index2 = ref(1)
+let myitems = reactive(props.items)
 const URI = `/fr/admin/ajax/switch-position/section` // URI section
 
 const myselect = inject('myselect') // inject myselect
@@ -39,25 +35,7 @@ const getCopySectionHref = (item) => {
 }
 
 const changeIndex = (direction, index) => {
-    const changeIndexes = useChangeIndex(direction, index)
-    indexchange.value = changeIndexes.indexchange
-    directionchange.value = changeIndexes.directionchange
-    myitems = getUpOrDown(direction, index)
-}
-
-watch(indexchange, (newIndex, oldValue) =>{
-    myitems = getUpOrDown(directionchange.value, newIndex)
-    }
-)
-
-// si on remonte un item d'un cran (et du coup on baisse d'un niveau celui qu'on remplace)
-const getUpOrDown = (direction, index) => {
-     if(index > -1){
-        myitems = useGetUpOrDown(myitems, URI, direction, index)
-    }else{
-        myitems = props.items
-    }
-    return myitems
+    myitems = useChangeIndex(myitems, direction, index, URI)
 }
 
 const last = computed(() => {
@@ -70,7 +48,7 @@ const last = computed(() => {
 <table class="table mt-4" >
     <HeaderSection :header="header" ></HeaderSection>
     <tbody>
-        <template v-for="(item, index) in getUpOrDown(directionchange, indexchange)">
+        <template v-for="(item, index) in myitems">
         <tr v-if="useMyfilter(myselect,item.menu)" class="align-middle">
             <td class="col-1">
                 <div class="form-check form-switch form-switch-sm my-0">
