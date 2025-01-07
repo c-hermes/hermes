@@ -65,18 +65,12 @@ class Contact implements ContactInterface
 
         $metadata->addPropertyConstraint(
             'content', 
-            new Assert\Length(
-                [
+            new Assert\NotBlank([
                 'groups' => ['contact', 'livredor'],
-                'min' => 2,
-                'max' => 1000,
-        ]));
-        // $metadata->addPropertyConstraint(
-        //     'content', 
-        //     new Assert\NotBlank(
-        //         [
-        //         'groups' => ['contact', 'livredor'],
-        // ]));
+                'message' => 'Vous devez saisir un contenu.']),
+
+        );
+
     }
 
     /**

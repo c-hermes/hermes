@@ -174,7 +174,7 @@ class ContactType extends AbstractType
                 $subject = $data->getSubject();
                 $content = $data->getContent();
                 if (strtolower(ContactInterface::LIVREDOR) == strtolower($subject) || ContactInterface::CONTACT == strtolower($subject) ){
-                    if (is_null($content) ){
+                    if ('' == trim($content) ){
                         return ['contact', 'livredor'];
                     }
                 }
