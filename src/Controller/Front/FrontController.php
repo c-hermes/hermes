@@ -174,12 +174,12 @@ class FrontController extends AbstractController
     }
 
     private function baseForm($request, $doctrine, $page, $array, $mailer, $route){
-            if(isset($array['listForms'])){
-                $validation_group = $array['listForms'][0];
-            }
+            // if(isset($array['listForms'])){
+            //     $validation_group = $array['listForms'][0];
+            // }
             $entity = new Contact();
             $options = [
-                'validation_groups' => [$validation_group],
+                // 'validation_groups' => [$validation_group],
                 'bgcolor_btn' => $array['newsletter_bgcolor_btn'],
                 'contact_bgcolor_subject' => $array['contact_bgcolor_subject'],
                 'contact_color_subject' => $array['contact_color_subject'],
@@ -190,7 +190,8 @@ class FrontController extends AbstractController
             $form = $this->createForm(ContactType::class, $entity, $options);
             if (ContactInterface::LIVREDOR == $array['listForms'][0]) {
                 $entity = new Temoignage();
-                $form = $this->createForm(TemoignageType::class, $entity,['validation_groups' => [$validation_group]]);
+                $form = $this->createForm(TemoignageType::class, $entity);
+                // $form = $this->createForm(TemoignageType::class, $entity,['validation_groups' => [$validation_group]]);
             }
 
             // On vérifie qu'elle est de type « POST ».

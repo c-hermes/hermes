@@ -45,17 +45,15 @@ class ContactType extends AbstractType
         $contact_subjects = $options['contact_subjects'];
         $builder
             ->add('subject', ChoiceType::class, [
-                'validation_groups' => false,
                 'choices' => $contact_subjects,
-                'empty_data' => function () use ($options): string {
-                        return ucfirst($options['validation_groups'][0]);
-                    },
+                // 'empty_data' => function () use ($options): string {
+                //         return ucfirst($options['validation_groups'][0]);
+                //     },
                 'attr' => ['class' => "form-select col-12 col-12 border-light rounded-0 text-center fst-italic", 'style' => "color:$contact_color_subject; background-color:$contact_bgcolor_subject" ,'id' => "subject", ]
                 ]
             )
             ->add('firstname', TextType::class,
                 [
-                    'validation_groups' => ['contact'],
                     'constraints' => new Assert\Type('string'),
                     'label' => 'Prénom', 
                     'attr' => ['class' => "col-12 border-light rounded-0 ", 'style' => "color:$contact_color_input; background-color:$contact_bgcolor_input" ,'id' => "name", 'data-validation-required-message' => "Merci de saisir votre nom.",
@@ -64,7 +62,6 @@ class ContactType extends AbstractType
             )
             ->add('lastname', TextType::class,
                 [
-                    'validation_groups' => ['contact'],
                     'constraints' => new Assert\Type('string'),
                     'label' => 'Nom', 
                     'attr' => ['class' => "col-12 border-light rounded-0", 'style' => "color:$contact_color_input; background-color:$contact_bgcolor_input" ,'id' => "name", 'data-validation-required-message' => "Merci de saisir votre nom.",
@@ -73,7 +70,6 @@ class ContactType extends AbstractType
             )
             ->add('email', EmailType::class,
                 [
-                    'validation_groups' => ['contact', 'newsletter', 'livredor'],
                     'label' => '* Email ', 
                     'attr' => ['class' => "col-12 border-light rounded-0", 'style' => "color:$contact_color_input; background-color:$contact_bgcolor_input" , 'id' => "name", 'data-validation-required-message' => "Merci de saisir votre émail.",
                     'placeholder' => "formulaire.email_placeholder"]
@@ -81,7 +77,6 @@ class ContactType extends AbstractType
             )
             ->add('telephone', TelType::class,
                 [
-                    'validation_groups' => ['contact'],
                     'constraints' => new Assert\Length(['min' => 10, 'max' => 10, 'exactMessage' => 'contact.message.telephone']),
                     'label' => 'Téléphone ', 'required' => false, 
                     'attr' => ['class' => "col-12 border-light rounded-0 ", 'style' => "color:$contact_color_input; background-color:$contact_bgcolor_input" , 'id' => "phone",
@@ -90,7 +85,6 @@ class ContactType extends AbstractType
             )
             ->add('content', TextareaType::class,
                 [
-                    'validation_groups' => ['contact', 'livredor'],
                     'label' => '* Votre message ', 
                     'attr' => ['class' => "col-12 border-light rounded-0 ", 'style' => "color:$contact_color_input; background-color:$contact_bgcolor_input" ,'id' => "message", 'data-validation-required-message' => "Please enter your name.",
                     'placeholder' => "formulaire.message_placeholder", 'rows' => '15']
@@ -175,6 +169,17 @@ class ContactType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
+            'validation_groups' => function (FormInterface $form): array {
+                $data = $form->getData();
+                $subject = $data->getSubject();
+                $content = $data->getContent();
+                if (strtolower(ContactInterface::LIVREDOR) == strtolower($subject) || ContactInterface::CONTACT == strtolower($subject) ){
+                    if (is_null($content) ){
+                        return ['contact', 'livredor'];
+                    }
+                }
+                return ['Default'];
+            },
             'emailTo' => null,
             'bgcolor_btn' => 'btn-outline-danger',
             'contact_bgcolor_subject' => '#000000',
