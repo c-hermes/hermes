@@ -1,6 +1,6 @@
 {% form_theme form 'admin/form/theme_posts.html.twig' %}
 {#{% import "admin/section/macro_form.html.twig" as forms %}#}
-{{ form_start(form) }}
+{{ form_start(form) }} 
         {{ form_row(form.type) }}
     {% if is_granted('ROLE_SUPER_ADMIN') %}
         {{ form_row(form.code) }}
