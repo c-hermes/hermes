@@ -3,7 +3,9 @@
 {% block title %}{{ 'user.newsletter'|trans() }}{% endblock %}
 
 {% block content %}
-    <h1 class="text-secondary">{{ 'user.newsletter'|trans() }}</h1>
+    <h1 class="text-secondary">{{ 'user.newsletter'|trans() }} / <a class="hms-color1" href="{{ path('section_newsletter') }}">{{ 'section.newsletter'|trans() }}</a></h1>
+
+       
         <tr >
         <td>
             <div class="form-check form-switch form-switch-sm my-0">
