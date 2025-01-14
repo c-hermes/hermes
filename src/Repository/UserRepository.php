@@ -81,12 +81,8 @@ class UserRepository extends ServiceEntityRepository
     {
 
         $user = $this->findOneById($id);
-
-        if($user->isActiveNewsletter()){
-            $user->setActiveNewsletter(false);
-        }else{
-            $user->setActiveNewsletter(true);
-        }
+        $switchActive = !$user->isActiveNewsletter();
+        $user->setActiveNewsletter($switchActive);
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
 
@@ -94,14 +90,16 @@ class UserRepository extends ServiceEntityRepository
 
     }
 
-    public function switchActiveAll()
+    public function switchActiveAll($active)
     {
+        if("false" == $active){
+            $active = false;
+        }
         $newsletter_users = $this->findNewsletterUsers("ROLE_NEWSLETTER", true, true);
 
         foreach($newsletter_users as $user){
-            $user->setActiveNewsletter(true);
+            $user->setActiveNewsletter(boolval($active));
             $this->getEntityManager()->persist($user);
-
         }
         $this->getEntityManager()->flush();
 

@@ -85,15 +85,25 @@ jQuery(document).ready(function () {
     // Switch active_newsletter users (user)
     var $activeUsers = $('.users-active');
     $activeUsers.on('click', function (e) {
-        // active/desactive
+        var active = true;
         $url = "/fr/admin/user/ajax/switch/users";
-        switchActiveAll($url);
+        switchActiveAll($url,active);
         let actives = document.getElementsByClassName('user-active');
         Array.from(actives).forEach( (el) => {
-            el.setAttribute("checked", true);
+            el.checked = active;
           });
-       
     });
+    var $inactiveUsers = $('.users-inactive');
+    $inactiveUsers.on('click', function (e) {
+        var active = false;
+        $url = "/fr/admin/user/ajax/switch/users";
+        switchActiveAll($url,active);
+        let actives = document.getElementsByClassName('user-active');
+        Array.from(actives).forEach( (el) => {
+            el.checked = active;
+          });
+    });
+
 
 
 });
@@ -113,11 +123,14 @@ function switchActive($url, $id) {
 
 }
 
-function switchActiveAll($url) {
+function switchActiveAll($url, $active) {
 
     $.ajax({
         type: "POST",
         url: $url,
+        data: {
+            active: $active
+        },
         dataType: "json",
         success: function (response) {
         }

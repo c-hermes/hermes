@@ -4,10 +4,13 @@
 
 {% block content %}
     <h1 class="text-secondary">{{ 'user.newsletter'|trans() }}</h1>
-        <tr class="align-middle">
+        <tr >
         <td>
             <div class="form-check form-switch form-switch-sm my-0">
-                <input type="checkbox" id="users-active" class="users-active form-check-input"  "checked" >
+            <div class="col-sm-6">
+                <input type="button" id="users-inactive" class="col-sm-2 users-inactive button ms-2" value ="Désactiver" >
+                <input type="button" id="users-active" class="col-sm-1 users-active button" value ="Activer" >
+            </div>
                 <label class="custom-control-label" ></label>
             </div>
         </td>

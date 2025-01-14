@@ -161,7 +161,8 @@ class UserController extends AbstractAdminController
     public function ajaxActiveAll(Request $request, UserRepository $userRepository)
     {
         if ($request->isXMLHttpRequest()) {
-            $data = $userRepository->switchActiveAll();
+            $active = $request->request->get('active');
+            $data = $userRepository->switchActiveAll($active);
             return new JsonResponse(array('data' => $data));
         }
 
