@@ -36,6 +36,7 @@ class UserRepository extends ServiceEntityRepository
         $newsletter_users = [];
         
         $users =  $this->createQueryBuilder('u')
+            ->orderBy('u.lastname', 'ASC')
             ->getQuery()
             ->getResult()
         ;
