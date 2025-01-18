@@ -87,6 +87,7 @@ class UserController extends AbstractAdminController
     }
 
     #[Route(path: '/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
+    #[Route(path: '/{id}/newsletter/edit', name: 'user_newsletter_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, ManagerRegistry $doctrine,User $user): Response
     {
         if(!$this->isGranted('ROLE_SUPER_ADMIN')){
@@ -102,7 +103,10 @@ class UserController extends AbstractAdminController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $doctrine->getManager()->flush();
-
+            $route = $request->attributes->get('_route');
+            if('user_newsletter_edit' == $route){
+                return $this->redirectToRoute('user_newsletter');
+            }
             return $this->redirectToRoute('user_index');
         }
 
