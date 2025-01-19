@@ -5,7 +5,9 @@ namespace App\Form\Admin;
 use App\Entity\Hermes\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class UserType extends AbstractType
 {
@@ -24,7 +26,7 @@ class UserType extends AbstractType
             ->add('email', null, [
                 'label' => 'user.email',
             ])
-            ->add('password', 'Symfony\Component\Form\Extension\Core\Type\PasswordType', [
+            ->add('password', PasswordType::class, [
                 'label' => 'user.password',
             ]);
             $builder
@@ -41,6 +43,15 @@ class UserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
+            'validation_groups' => function (FormInterface $form): array {
+                $data = $form->getData();
+                $roles = $data->getRoles();
+                $password = $data->getPassword();
+                if (in_array(User::ROLE_ADMIN, $roles) && '' == trim($password)){
+                    return ['admin'];
+                }
+                return ['Default'];
+            },
             'data_class' => User::class,
             'disable_roles' => false,
             'roles' => ['ROLE_USER'],

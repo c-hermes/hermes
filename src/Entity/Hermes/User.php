@@ -8,11 +8,16 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
+
+
 #[ORM\Entity(repositoryClass: \App\Repository\UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
     const ROLE_SUPER_ADMIN =  'ROLE_SUPER_ADMIN' ;
+    const ROLE_ADMIN =  'ROLE_ADMIN' ;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -32,10 +37,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $roles = [];
 
     /**
-     * @var string The hashed password
+     * @var string|null The hashed password
      */
-    #[ORM\Column(type: 'string')]
-    private $password;
+    #[ORM\Column(type: 'string', nullable: true)]
+    private $password = '';
 
     /**
      * @var boolean
@@ -184,12 +189,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return (string) $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
 
         $this->password = $password;
@@ -319,6 +324,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if(in_array(self::ROLE_SUPER_ADMIN, $this->getRoles())){
             $this->superAdmin =  true;
         }
+    }
+    
+    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    {
+         $metadata->addPropertyConstraint(
+            'password',
+            new Assert\NotBlank([
+                'groups' => ['admin'],
+                'message' => 'Vous devez saisir un mot de passe.']),
+        );
+
     }
 
 

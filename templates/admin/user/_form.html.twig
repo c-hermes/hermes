@@ -5,8 +5,11 @@
     {{ form_row(form.firstname) }}
     {{ form_row(form.lastname) }}
     {{ form_row(form.email) }}
-    {{ form_row(form.password) }}
     {% if form.roles is defined %}
+        {% set route =  app.request.get('_route') %}
+        {% if 'ROLE_ADMIN' in form.roles.vars.value and route == 'user_edit' %}
+            {{ form_row(form.password) }}
+        {% endif %}
         {{ form_row(form.roles) }}
     {% endif %}
 <button class="btn btn-outline-secondary hms-bg-color1 mt-4 col-12 col-lg-2" type="submit"><i class="fa fa-save"></i> {{ 'global.update'|trans() }} </button>
