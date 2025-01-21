@@ -13,16 +13,17 @@ class LoadUser extends Fixture  implements FixtureGroupInterface
     const USER_ADMIN = 'user-admin';
     const USER_ADMIN_POST = 'user-admin-post';
     const EMAIL = 'test@atlas-services.fr';
-    const PASSWORD = 'pwtest';
+    const PASSWORD = 'pwtest'; // 'pwtest';
+    const PASSWORD_HASH = '$2y$13$PeG1twlwQkuskE97nd/uBuHV0Hyq2h0xUe06Lg4AxIUIYCiGHsdbm'; // 'pwtest';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         //super admin
         $user = new User();
         $user->setFirstname('Tayeb');
         $user->setLastname('CHIKHI');
         $user->setEmail(self::EMAIL);
-        $user->setPassword(self::PASSWORD);
+        $user->setPassword(self::PASSWORD_HASH);
         $user->setRoles(['ROLE_SUPER_ADMIN']);
         $this->addReference(self::USER_SUPER_ADMIN, $user);
         $manager->persist($user);
@@ -32,7 +33,7 @@ class LoadUser extends Fixture  implements FixtureGroupInterface
 
     public static function getGroups(): array
     {
-        return ['users'];
+        return ['default', 'users'];
     }
 
 }

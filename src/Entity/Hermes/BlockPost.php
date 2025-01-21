@@ -85,7 +85,7 @@ class BlockPost extends AbstractContent implements \JsonSerializable
         $this->block = $block;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         $public = 'public';
         $src = '';

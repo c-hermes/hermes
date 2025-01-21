@@ -220,19 +220,24 @@ parameters:
         affiche_admin_post:
           summary: Affichage des posts dans le menu "Menu et pages"
           value: false
+          position: 1
       head:
         title:
           summary: Texte affiché sur l'onglet du navigateur web
           value: hermes-cms
+          position: 1
         description:
           summary: Balise méta description
           value: Mon site web
+          position: 2
         author:
           summary: Balise méta author
           value: Hermes CMS
+          position: 3
         robots:
           summary: Balise méta robots
           value: index, follow
+          position: 4 
       site:
         template:
           summary: Choix du template général d'affichage
@@ -327,21 +332,27 @@ parameters:
         linkedin:
           summary: configuration linkedin
           value: ~
+          position: 1
         facebook:
           summary: configuration facebook
           value: ~
+          position: 2
         twitter:
           summary: configuration twitter
           value: ~
+          position: 3
         instagram:
           summary: configuration instagram
           value: ~
+          position: 4
         youtube:
           summary: configuration youtube
           value: ~
+          position: 5
         dribbble:
           summary: configuration dribbble
           value: ~
+          position: 6
       contact:
         contact_affiche:
           summary: Affiche Email de contact (utilisé dans le formulaire de contact)
@@ -390,7 +401,7 @@ parameters:
         contact_color_input:
           summary: Couleur input du formulaire
           value: '#000000'
-          postion: 11
+          position: 11
       newsletter:
         newsletter_active:
           summary: Activer la newsletter dans les Formulaires
@@ -571,13 +582,16 @@ parameters:
         folio_container_width:
           summary: Largeur du folio affiché (max= 12)
           value: 8
+          position: 1
       carousel:
         carousel_container_width:
           summary: Largeur du carousel affiché (max= 12)
           value: 8
+          position: 2
         carousel_multiple_container_width:
           summary: Largeur du carousel multi images affiché (max= 12)
           value: 9
+          position: 3
       modale:
         modale_bgcolor:
           summary: Couleur de fond des modales

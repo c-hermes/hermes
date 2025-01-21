@@ -8,3 +8,13 @@ services:
 
     Tests\DataFixtures\:
         resource: '../tests/DataFixtures/*'
+
+    Tests\DataFixtures\LoadTemplate:
+        class: Tests\DataFixtures\LoadTemplate
+        calls:
+            - setParams: ['@parameter_bag']
+
+    Tests\DataFixtures\LoadConfig:
+        class: Tests\DataFixtures\LoadConfig
+        calls:
+            - setParams: ['@parameter_bag']

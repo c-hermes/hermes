@@ -6,13 +6,22 @@ use Symfony\Component\Translation\TranslatorInterface;
 use Tests\Controller\AbstractBaseControllerTest;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Tests\DataFixtures\LoadTemplate;
+use Tests\DataFixtures\LoadUser;
 
 class MenuContactControllerTest extends AbstractBaseControllerTest
 {
 
     public function testAddContactSheetAndMenu( )
     {
-        $client = self::$client;
+        // $this->databaseTool->loadFixtures([
+        //     LoadUser::class,
+        //     LoadTemplate::class,
+        // ]);
+        $this->client = $this->createClient();
+
+
+        $this->login();
+
         $translator = self::$translator;
 
         $this->prepareMenu();
@@ -35,17 +44,17 @@ class MenuContactControllerTest extends AbstractBaseControllerTest
 
     protected function prepareMenu( )
     {
-        $client = self::$client;
+        $client =$this->client;
 
         $client->request('GET', '/fr/admin/page/');
 
-        self::$client = $client;
+       $this->client = $client;
 
     }
 
     protected function preparePageContactMenu( )
     {
-        $client = self::$client;
+        $client =$this->client;
         $translator = self::$translator;
 
         $new_sheet = $translator->trans('global.new');
@@ -61,7 +70,7 @@ class MenuContactControllerTest extends AbstractBaseControllerTest
         
         $crawler = $client->submit($form_sheet);
 
-        self::$client = $client;
+       $this->client = $client;
 
         return $crawler;
 
@@ -69,7 +78,7 @@ class MenuContactControllerTest extends AbstractBaseControllerTest
 
     protected function addContact($crawler)
     {
-        $client = self::$client;
+        $client =$this->client;
         $translator = self::$translator;
 
         // add Contact
@@ -89,7 +98,7 @@ class MenuContactControllerTest extends AbstractBaseControllerTest
 
     protected function addContent($crawler)
     {
-        $client = self::$client;
+        $client = $this->client;
         $translator = self::$translator;
 
         $imd_dir = realpath(__DIR__.'/../../../public/img/hermes/crms/Templates/Images');

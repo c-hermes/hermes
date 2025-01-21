@@ -6,27 +6,26 @@ use App\Entity\Hermes\Template;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class LoadTemplate extends Fixture  implements FixtureGroupInterface, ContainerAwareInterface
+class LoadTemplate extends Fixture  implements FixtureGroupInterface
 {
     /**
-     * @var ContainerInterface
+     * @var ParameterBagInterface
      */
-    private $container;
+    private $params;
 
-    public function setContainer(ContainerInterface $container = null)
+    public function setParams(ParameterBagInterface $parameterBagInterface = null)
     {
-        $this->container = $container;
+        $this->params = $parameterBagInterface;
+
     }
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
-        $configurations = $this->container->getParameter('init');
+        $configurations = $this->params->get('init');
         $templates = $configurations['template'];
 
         foreach ($templates as $i => $value) {
-
             $item = new Template();
             $item->setActive(true);
             $item->setType($value['type']);
@@ -36,15 +35,15 @@ class LoadTemplate extends Fixture  implements FixtureGroupInterface, ContainerA
 
             $code = $value['code'];
             $this->addReference("$code", $item);
-
             $manager->persist($item);
         }
         $manager->flush();
+
     }
 
     public static function getGroups(): array
     {
-        return ['templates'];
+        return ['default', 'templates'];
     }
 
 }

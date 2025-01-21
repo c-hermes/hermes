@@ -27,7 +27,7 @@ doctrine-init:
 	php bin/console hermes:db-update
 	rm -r var/cache/* var/log/* 2> /dev/null || true
 
-phpunit-test-admin:
+phpunit-test-admin-sheet:
 	rm -r data/db/test.sqlite data/db/config/test.sqlite 2> /dev/null || true
 	php bin/console doctrine:cache:clear-metadata
 	php bin/console doctrine:cache:clear-query
@@ -35,12 +35,30 @@ phpunit-test-admin:
 	php bin/console doctrine:database:drop --force --connection=default --env=test
 	php bin/console doctrine:database:drop --force --connection=config --env=test
 	php bin/console doctrine:database:create --env=test
+	php bin/console doctrine:database:create --env=test --connection=config
 	php bin/console d:s:u --force --em=default --env=test
 	php bin/console d:s:u --force --em=config --env=test
-	SYMFONY_ENV=test composer install
-	php bin/console hermes:db-update --env=test
+	php bin/console doctrine:fixtures:load  --env=test  --group=default --em=default -n
+	php bin/console doctrine:fixtures:load  --env=test  --group=config --em=config -n
 	rm -r var/cache/* var/log/* 2> /dev/null || true
-	vendor/bin/phpunit -c phpunit.xml tests/Controller/Admin/MenuContactControllerTest.php
+	vendor/bin/phpunit -c phpunit.xml tests/Controller/Admin/SheetControllerTest.php
+
+phpunit-test-admin-menu:
+	rm -r data/db/test.sqlite data/db/config/test.sqlite 2> /dev/null || true
+	php bin/console doctrine:cache:clear-metadata
+	php bin/console doctrine:cache:clear-query
+	php bin/console doctrine:cache:clear-result
+	php bin/console doctrine:database:drop --force --connection=default --env=test
+	php bin/console doctrine:database:drop --force --connection=config --env=test
+	php bin/console doctrine:database:create --env=test
+	php bin/console doctrine:database:create --env=test --connection=config
+	php bin/console d:s:u --force --em=default --env=test
+	php bin/console d:s:u --force --em=config --env=test
+	php bin/console doctrine:fixtures:load  --env=test  --group=default --em=default -n
+	php bin/console doctrine:fixtures:load  --env=test  --group=config --em=config -n
+	rm -r var/cache/* var/log/* 2> /dev/null || true
+	vendor/bin/phpunit -c phpunit.xml tests/Controller/Admin/MenuControllerTest.php
+
 
 
 phpunit-test-front:

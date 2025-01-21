@@ -23,7 +23,7 @@ class Temoignage implements ContactInterface, \JsonSerializable
     use EmailTrait;
     use ContentTrait;
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return
             [

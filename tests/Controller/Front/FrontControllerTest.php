@@ -2,6 +2,7 @@
 namespace Tests\Controller\Front;
 
 use Liip\FunctionalTestBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
 class FrontControllerTest extends WebTestCase
 {
@@ -16,7 +17,7 @@ class FrontControllerTest extends WebTestCase
 
     }
 
-    public static function createClient(array $options = [], array $server = [])
+    public static function createClient(array $options = [], array $server = []): KernelBrowser
     {
         self::ensureKernelShutdown();
         $client =  parent::createClient($options, $server); // $client

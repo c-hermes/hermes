@@ -50,11 +50,13 @@
             {% include 'front/base/hermes/credits.html.twig' %}
             {% include 'admin/security/send_unsubscribe_newsletter.html.twig' %}
             {% block nav %}
-                {% if  (vich_uploader_asset(logo, 'imageFile')) %}
-                    {% set asset_logo1 = asset(vich_uploader_asset(logo, 'imageFile')) %}
-                {% endif %}
-                {% if  (vich_uploader_asset(accueil, 'imageFile')) %}
-                    {% set asset_logo2 = asset(vich_uploader_asset(accueil, 'imageFile')) %}
+                {% if logo is defined %}
+                    {% if  (vich_uploader_asset(logo, 'imageFile')) %}
+                        {% set asset_logo1 = asset(vich_uploader_asset(logo, 'imageFile')) %}
+                    {% endif %}
+                    {% if  (vich_uploader_asset(accueil, 'imageFile')) %}
+                        {% set asset_logo2 = asset(vich_uploader_asset(accueil, 'imageFile')) %}
+                    {% endif %}
                 {% endif %}
                 <input type="hidden" id="hidden_logo1" value="{{ asset_logo1 ?? '' }}">
                 <input type="hidden" id="hidden_logo2" value="{{ asset_logo2 ?? asset_logo1 ?? '' }}">

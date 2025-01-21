@@ -9,15 +9,7 @@ use Tests\DataFixtures\LoadTemplate;
 
 class MenuControllerTest extends AbstractBaseControllerTest
 {
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        static::$fixtures = $this->databaseTool
-            ->loadFixtures([
-                LoadTemplate::class,
-            ],true, false);
-    }
+    const IMG_BASEPATH = "public/img/hermes/crms/Templates/Images";
 
     public function testAddSheetAndMenu( )
     {
@@ -28,15 +20,19 @@ class MenuControllerTest extends AbstractBaseControllerTest
 
         $this->assertResponseIsSuccessful();
 
-        $crawler = $this->preparePageMenu();
+        $this->preparePageMenu();
 
         $this->assertResponseIsSuccessful();
 
         $this->assertStringContainsString( 'Je crée une nouvelle page.', $client->getResponse());
 
+        $this->preparePageSousMenu();
+
+        $this->assertResponseIsSuccessful();
+
         // add Content
 
-        $this->addContent($crawler);
+        //$this->addContent($crawler);
 
         $this->assertResponseIsSuccessful();
 
@@ -81,10 +77,39 @@ class MenuControllerTest extends AbstractBaseControllerTest
 
         $form_sheet = $crawler->selectButton($saveAndAdd)->form();
 
-        $form_sheet["sheet[name]"] = 'Page tests';
-        $form_sheet["sheet[referenceName]"] = 'pagetests';
-        
+        $form_sheet["sheet[name]"] = 'Menu1';
+        // $form_sheet["sheet[referenceName]"] = 'pagetests';
+
         $crawler = $client->submit($form_sheet);
+
+        self::$client = $client;
+
+        return $crawler;
+
+    }
+
+    protected function preparePageSousMenu( )
+    {
+        $client = self::$client;
+        $client->followRedirects(true);
+        $translator = self::$translator;
+
+        $client->request('GET', '/fr/admin/menu');
+
+        dd($client->getResponse()->getContent());
+
+        $new_menu = $translator->trans('global.new_menu');
+
+        $crawler = $client->clickLink($new_menu);
+
+        $save = $translator->trans('global.update');
+
+        $form_menu = $crawler->selectButton($save)->form();
+
+        $form_menu["base_menu[name]"] = 'Sous Menu';
+        // $form_sheet["sheet[referenceName]"] = 'pagetests';
+
+        $crawler = $client->submit($form_menu);
 
         self::$client = $client;
 
@@ -97,7 +122,7 @@ class MenuControllerTest extends AbstractBaseControllerTest
         $client = self::$client;
         $translator = self::$translator;
 
-        $imd_dir = realpath(__DIR__.'/../../../public/img/hermes/test/list/');
+        $imd_dir = realpath(__DIR__.'/../../../' . self::IMG_BASEPATH); //public/img/hermes/crms/Templates/Images/image1.webp
         $files = scandir($imd_dir);
         unset($files[0]);
         unset($files[1]);
@@ -116,8 +141,8 @@ class MenuControllerTest extends AbstractBaseControllerTest
         $form_content["menu[sections][0][posts][0][content]"]= 'test post0 folio classique' ; // 'Folio Classique';
 
         $uploadedFile = new UploadedFile(
-            realpath(__DIR__.'/../../../public/img/hermes/test/list/1.jpg'),
-        '1.jpg'
+            realpath(__DIR__.'/../../../'.self::IMG_BASEPATH.' /image1.webp'),
+        'image1.webp'
         );
         $form_content["menu[sections][0][posts][0][imageFile][file]"]= $uploadedFile ; // 'Folio Classique';
 

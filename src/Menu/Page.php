@@ -86,11 +86,11 @@ class Page
             Contact::CONTACT => Contact::CONTACT ,
         ];
 
-        if(($this->config['newsletter_active'])){
+        if( isset($this->config['newsletter_active']) && ($this->config['newsletter_active'])){
             $contact_subjects[Contact::NEWSLETTER_TEXTE]  = Contact::NEWSLETTER ;
         }
         
-        if(($this->config['livredor_active'])){
+        if( isset($this->config['livredor_active']) && $this->config['livredor_active']){
             $contact_subjects[Contact::LIVREDOR_TEXTE]  = Contact::LIVREDOR ;
         }
 
@@ -162,7 +162,7 @@ class Page
             $navbar[$sheet_name] = $listmenu;
             if (is_array($listmenu)) {
                 if ($sheet_name == array_key_first($menus[array_key_first($menus)]) && (1 == count($menus[array_key_first($menus)])) ) {
-                    $nav['href'] = sprintf("/%s/", $locale);                
+                    $nav['href'] = sprintf("/%s/", $locale);
                 }else{
                     if ((strtolower($sheet_name) != strtolower(array_key_first($listmenu))) or 2 < count($listmenu)) {
                         $nav['href'] = '#';

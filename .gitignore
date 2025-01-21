@@ -1,7 +1,8 @@
 ###> symfony/framework-bundle ###
-/.env.local
-/.env.local.php
-/.env.*.local
+.env.local
+.env.local.php
+.env.*.local
+.env test..local
 /public/*
 !/public/img/hermes/crms
 !/public/img/hermes/images

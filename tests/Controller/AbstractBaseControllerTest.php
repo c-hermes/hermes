@@ -5,6 +5,7 @@ use Tests\DataFixtures\LoadUser;
 use Tests\DataFixtures\LoadTemplate;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 abstract class AbstractBaseControllerTest extends WebTestCase
@@ -24,17 +25,17 @@ abstract class AbstractBaseControllerTest extends WebTestCase
         static::$translator = static::getContainer()->get('translator');
         $this->databaseTool = static::getContainer()->get(DatabaseToolCollection::class)->get();
 
-        if (null == self::$fixtures){
-            static::$fixtures = $this->databaseTool
-                ->loadFixtures([
-                    LoadUser::class,
-                    LoadTemplate::class,
-                ],);
-        }
+        // if (null == self::$fixtures){
+        //     static::$fixtures = $this->databaseTool
+        //         ->loadFixtures([
+        //             LoadUser::class,
+        //             LoadTemplate::class,
+        //         ],);
+        // }
         $this->login();
     }
 
-    public static function createClient(array $options = [], array $server = [])
+    public static function createClient(array $options = [], array $server = []): KernelBrowser
     {
         self::ensureKernelShutdown();
         $client =  parent::createClient($options, $server); // $client
@@ -49,10 +50,11 @@ abstract class AbstractBaseControllerTest extends WebTestCase
         $crawler = $client->request('GET', $url);
 
         $form = $crawler->selectButton($submit)->form();
-        $form['email']->setValue($username);
-        $form['password']->setValue($password);
+        $form['_username']->setValue($username);
+        $form['_password']->setValue($password);
 
         $client->submit($form);
+
         $client->followRedirects($bFollow);
 
         static::$client = $client;

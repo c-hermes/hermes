@@ -95,8 +95,13 @@ class FrontController extends AbstractController
         $localeRouting = $request->attributes->get('_locale' , 'fr');
         $locale = $page->getLocale($localeRouting);
         $home_menu = $doctrine->getRepository(Menu::class)->getHomeMenu($locale);
-        $sheet = $home_menu->getSheet()->getSlug();
-        $slug = $home_menu->getSlug();
+        if(is_null($home_menu)){
+            $sheet =  $doctrine->getRepository(Sheet::class)->findAll()[0];
+            $slug = $sheet->getSlug();
+        }else{
+            $sheet = $home_menu->getSheet()->getSlug();
+            $slug = $home_menu->getSlug();
+        }
         $array = $this->getArray($doctrine, $page, $sheet, $slug, $route, $locale);
         $localeNotExists = !in_array($localeRouting, array_keys($array['locales']));
         if(is_null($array['menu']) or $localeNotExists){

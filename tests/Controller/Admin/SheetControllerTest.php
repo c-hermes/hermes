@@ -1,8 +1,9 @@
 <?php
 namespace Tests\Controller\Admin;
 
-use Tests\DataFixtures\LoadUser;
+use App\Repository\UserRepository;
 use Tests\Controller\AbstractBaseControllerTest;
+use Tests\DataFixtures\LoadUser;
 
 class SheetControllerTest extends AbstractBaseControllerTest
 {
@@ -21,13 +22,17 @@ class SheetControllerTest extends AbstractBaseControllerTest
     	$client = static::$client;
     	$translator = static::$translator;
 
+        $this->login();
+
         $crawler = $client->request('GET', '/fr/admin/nouvelle-page');
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $save = $translator->trans('global.update');
 
         $form = $crawler->selectButton($save)->form();
         $form["sheet[name]"] = 'Page test';
-        $form["sheet[referenceName]"] = 'pagetest';
+        // $form["sheet[referenceName]"] = 'pagetest';
 
         $client->submit($form);
 
@@ -45,7 +50,7 @@ class SheetControllerTest extends AbstractBaseControllerTest
 
         $form = $crawler->selectButton($save)->form();
         $form["sheet[name]"] = 'Contact';
-        $form["sheet[referenceName]"] = 'contact';
+        // $form["sheet[referenceName]"] = 'contact';
 
         $client->submit($form);
 

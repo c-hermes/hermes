@@ -2,16 +2,13 @@
 
 namespace Tests\DataFixtures;
 
-use App\Entity\Hermes\Template;
 use App\Entity\Hermes\Sheet;
 use App\Entity\Hermes\Menu;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-class LoadFullMenu extends Fixture  implements FixtureGroupInterface, ContainerAwareInterface
+class LoadFullMenu extends Fixture  implements FixtureGroupInterface
 {
     const REF_SHEET = 'sheet';
     const REF_MENU = 'menu';
@@ -49,17 +46,7 @@ class LoadFullMenu extends Fixture  implements FixtureGroupInterface, ContainerA
     ];
 
 
-
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
 
         $this->loadSheets($manager);
@@ -93,7 +80,7 @@ class LoadFullMenu extends Fixture  implements FixtureGroupInterface, ContainerA
             $manager->persist($item);
             $pos++;
         }
-        
+
         $manager->flush();
     }
     public function loadMenus($manager)
@@ -105,7 +92,7 @@ class LoadFullMenu extends Fixture  implements FixtureGroupInterface, ContainerA
 
         foreach ($menus as $key => $value) {
 
-            $sheet = $this->getReference(self::REF_SHEET.$value);
+            $sheet = $this->getReference(self::REF_SHEET.$value, Sheet::class);
             $item = new Menu();
             $item->setActive(true);
             $item->setSheet($sheet);
