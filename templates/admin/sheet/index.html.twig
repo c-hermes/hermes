@@ -19,7 +19,7 @@
         }
     %}
 
-    <h1 class="text-secondary">{{ 'sheet.list'|trans() }}</h1>
+    <h1 id="{{ 'sheet.list'|trans() }}" class="text-secondary">{{ 'sheet.list'|trans() }}</h1>
     <input id="vue_items_sheet" type="hidden" value="{{ sheets|json_encode }}" data-global="{{ global|json_encode}}" data-norecord="{{ norecord|json_encode}}"  />
     <!-- Composant Vue ListSheet -->
     <table class="table" id="vue_admin_list_sheet" ></table>

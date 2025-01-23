@@ -59,7 +59,24 @@ phpunit-test-admin-menu:
 	rm -r var/cache/* var/log/* 2> /dev/null || true
 	vendor/bin/phpunit -c phpunit.xml tests/Controller/Admin/MenuControllerTest.php
 
-
+phpunit-test-admin-panther:
+	rm -r data/db/test.sqlite data/db/config/test.sqlite 2> /dev/null || true
+	php bin/console doctrine:cache:clear-metadata
+	php bin/console doctrine:cache:clear-query
+	php bin/console doctrine:cache:clear-result
+	php bin/console doctrine:database:drop --force --connection=default --env=test
+	php bin/console doctrine:database:drop --force --connection=config --env=test
+	php bin/console doctrine:database:create --env=test
+	php bin/console doctrine:database:create --env=test --connection=config
+	php bin/console d:s:u --force --em=default --env=test
+	php bin/console d:s:u --force --em=config --env=test
+	php bin/console doctrine:fixtures:load  --env=test  --group=default --em=default -n
+	php bin/console doctrine:fixtures:load  --env=test  --group=config --em=config -n
+	rm -r var/cache/* var/log/* 2> /dev/null || true
+	php vendor/bin/phpunit  -c phpunit.xml tests/Panther/LoginTest.php
+	php vendor/bin/phpunit  -c phpunit.xml tests/Panther/SheetTest.php
+	php vendor/bin/phpunit  -c phpunit.xml tests/Panther/MenuTest.php
+	php vendor/bin/phpunit  -c phpunit.xml tests/Panther/SectionTest.php
 
 phpunit-test-front:
 	rm -r data/db/test.sqlite data/db/config/test.sqlite 2> /dev/null || true

@@ -4,15 +4,11 @@ namespace App\Form\Admin;
 
 use App\Entity\Hermes\Menu;
 
-use App\Entity\Hermes\Section;
 use App\Entity\Hermes\Sheet;
 use App\Repository\SheetRepository;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -38,17 +34,13 @@ class BaseMenuType extends AbstractNameBaseType
                     },
                     'required' => true,
                     'label' => 'global.sheet',
-                    'attr' => ['class' => 'select2 custom-select custom-select-lg mb-3']
+                    'attr' => ['class' => 'form-select form-select-lg mb-3']
                 ])
-            // ->add('position', 'Symfony\Component\Form\Extension\Core\Type\NumberType', [
-            //     'required' => false,
-            //     'label' => 'global.position',
-            // ])
             ->add('position', 'Symfony\Component\Form\Extension\Core\Type\ChoiceType', [
                 'required' => false,
                 'attr' => [
                     'min' => 0,
-                    'max' => 99,                       
+                    'max' => 99,
                     'class' => 'custom-select custom-select-lg mb-3 ',
                     'label' => 'global.position',
                 ],
