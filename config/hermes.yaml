@@ -583,6 +583,14 @@ parameters:
           summary: Largeur du folio affiché (max= 12)
           value: 8
           position: 1
+        folio1_padding_x:
+          summary: Padding Folio1 horizontal (1 à 5)
+          value: 2
+          position: 2
+        folio1_padding_y:
+          summary: Padding Folio1 vertical (1 à 5)
+          value: 2
+          position: 2
       carousel:
         carousel_container_width:
           summary: Largeur du carousel affiché (max= 12)
