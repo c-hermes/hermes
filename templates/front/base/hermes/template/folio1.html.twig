@@ -2,7 +2,6 @@
 
 <section id="portfolio" class="py-0 pb-lg-4  mx-auto px-0" style="background-color:{{ section.templateBgColor ?? content_bgcolor }}">
     <div class="container-fluid col-12 col-lg-{{ (section.templateWidth ?? folio_container_width)|col_lg() }} mx-auto px-0" >
-    {% dump(_context) %}
         <div id="folio"  class="row mx-auto">
         {% for pictures in section|col_imgs %}
         {% set padding_x = folio1_padding_x ?? 2 %}
