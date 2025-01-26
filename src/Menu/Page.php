@@ -133,7 +133,7 @@ class Page
         }
 
         $menusLocale = $em->getRepository(Menu::class)
-            ->getMenusByLocaleOrderByPosition($locale)
+            ->getMenusByLocaleOrderByPosition($locale, true)
         ;
 
         foreach ($menusLocale as $menu){
@@ -187,7 +187,7 @@ class Page
         $em = $this->doctrine->getManager('default');
         $urls = $urls_xml = $urls_html = [];
         $menusLocale = $em->getRepository(Menu::class)
-            ->getMenusByLocaleOrderByPosition($locale)
+            ->getMenusByLocaleOrderByPosition($locale, true)
         ;
         foreach ($menusLocale as $key => $menu){
             $updated = $menu->getUpdatedAt();
