@@ -1,11 +1,11 @@
 <?php
-namespace Tests\Panther;
+namespace Tests\Panther\Admin;
 
 use Facebook\WebDriver\WebDriverDimension;
 use Symfony\Component\Panther\PantherTestCase;
 use Tests\DataFixtures\LoadUser;
 
-abstract class AbstractBasePantherTest extends PantherTestCase
+abstract class AbstractBaseAdminPanther extends PantherTestCase
 {
     const EMAIL = LoadUser::EMAIL;
     const PASSWORD = LoadUser::PASSWORD;

@@ -73,10 +73,14 @@ phpunit-test-admin-panther:
 	php bin/console doctrine:fixtures:load  --env=test  --group=default --em=default -n
 	php bin/console doctrine:fixtures:load  --env=test  --group=config --em=config -n
 	rm -r var/cache/* var/log/* 2> /dev/null || true
-	php vendor/bin/phpunit  -c phpunit.xml tests/Panther/LoginTest.php
-	php vendor/bin/phpunit  -c phpunit.xml tests/Panther/SheetTest.php
-	php vendor/bin/phpunit  -c phpunit.xml tests/Panther/MenuTest.php
-	php vendor/bin/phpunit  -c phpunit.xml tests/Panther/SectionTest.php
+	php vendor/bin/phpunit  -c phpunit.xml tests/Panther/Admin/LoginTest.php
+	php vendor/bin/phpunit  -c phpunit.xml tests/Panther/Admin/SheetTest.php
+	php vendor/bin/phpunit  -c phpunit.xml tests/Panther/Admin/MenuTest.php
+	php vendor/bin/phpunit  -c phpunit.xml tests/Panther/Admin/SectionTest.php
+	php vendor/bin/phpunit  -c phpunit.xml tests/Panther/Front/ContactTest.php
+
+phpunit-test-panther-front-contact:
+	php vendor/bin/phpunit  -c phpunit.xml tests/Panther/Front/ContactTest.php
 
 phpunit-test-front:
 	rm -r data/db/test.sqlite data/db/config/test.sqlite 2> /dev/null || true

@@ -1,9 +1,9 @@
 <?php
-namespace App\Tests\Panther;
+namespace App\Tests\Panther\Admin;
 
-use Tests\Panther\AbstractBasePantherTest;
+use Tests\Panther\Admin\AbstractBaseAdminPanther;
 
-class MenuTest extends AbstractBasePantherTest
+class MenuTest extends AbstractBaseAdminPanther
 {
     public function testMenu(): void
     {
